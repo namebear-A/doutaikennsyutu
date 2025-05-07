@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
+
+# 動体検知アプリの作成_0J02011_加納陽太
+
+# import文
+#=========================================================
 import cv2
+# cv2はOpenCVのライブラリで、画像処理やコンピュータビジョンのための関数を提供するライブラリ
 import flet as ft
+# fletは、PythonでGUIアプリケーションを作成するためのライブラリで、Webアプリケーションやデスクトップアプリケーションを簡単に作成できる
 import threading
+# threadingは、Pythonのスレッドを扱うためのライブラリで、マルチスレッドプログラミングを可能にする
+#========================================================
+
 
 # カメラ起動変数capを共有するための変数（グローバル）
 cap = None
 
-# 動体検知アプリのメイン関数
+# 動体検知アプリのメイン処理・関数
 #========================================================
 def main(page: ft.Page):
     page.title = "動体検知アプリ"
@@ -14,11 +24,15 @@ def main(page: ft.Page):
     # MainAxisAlignment.CENTERは、ページの垂直方向の配置を中央に設定するためのもの
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     # CrossAxisAlignment.CENTERは、ページの水平方向の配置を中央に設定するためのもの
+    page.window_width = 700 # ウィンドウの幅を600pxに設定
+    page.window_height = 700 # ウィンドウの高さを700pxに設定
 
     # 動体検出を開始・終了ボタンを押したときの処理
     #========================================================    
     def start_detection(e):
         threading.Thread(target=Motion_detection, daemon=True).start()
+        # threading.Threadは、スレッドを作成するためのクラス
+        # targetは、スレッドが実行する関数を指定するためのもの
 
     def end_detection(e):
         global cap
@@ -28,12 +42,13 @@ def main(page: ft.Page):
     #========================================================
 
     # 動体検知アプリのメイン関数を呼び出す
-    title_label = ft.Text("動体検出アプリの作成",font_family= "GN_Kill", size = 80, weight = "bold", color = "black")
+    title_label = ft.Text("動体検出         アプリの作成",font_family= "GN_Kill", size = 80, weight = "bold", color = "blue")
     strat_button = ft.ElevatedButton("動体検出開始", on_click = start_detection,style = ft.ButtonStyle(color = ft.colors.WHITE,bgcolor=ft.colors.BLUE_GREY_500), elevation = 30)
     end_button = ft.ElevatedButton("動体検出終了", on_click = end_detection,style = ft.ButtonStyle(color = ft.colors.WHITE,bgcolor = ft.colors.RED), elevation = 30)
 
 
     title_stack = ft.Stack(
+        # Stackは、子要素を重ねて配置するためのコンテナで、子要素を重ねて表示することができる
         controls = [          
  
             # container 一つ一つに範囲を与えその範囲内で配置させる　詳細必要
@@ -41,22 +56,24 @@ def main(page: ft.Page):
                 content = title_label,
                 
                 left = 80,  # X座標
-                top = 130,    # Y座標
+                top = 130,  # Y座標
+                width = 500, # 幅  
+                height = 500, # 高さ 
             ),
             ft.Container (
                 content = strat_button,
-                left = 230,   
-                top = 520,    
-                width = 200,   
-                height = 50,  
+                left = 230,  # X座標
+                top = 520,   # Y座標 
+                width = 200, # 幅  
+                height = 50, # 高さ 
                
             ),
             ft.Container (
                 content = end_button,
-                left = 230,   
-                top = 580,    
-                width = 200,   
-                height = 50, 
+                left = 230,  # X座標
+                top = 580,   # Y座標
+                width = 200, # 幅   
+                height = 50, # 高さ 
                
             ),
         ],
@@ -64,12 +81,17 @@ def main(page: ft.Page):
         # ボタンの配置範囲の指定　範囲外だと見切れる
         # 範囲を画面全体に広げる
         expand=True 
+        # expand=Trueは、Stackが親コンテナのサイズに合わせて拡張されることを指定するためのもの
+        # これにより、Stackが親コンテナのサイズに合わせて拡張されます。
     )
  
     page.add(title_stack)
+    # page.addは、ページにコンテナを追加するための関数
+    # ここでは、title_stackをページに追加しています。
 #========================================================
 
 
+# 動体検出アプリ内部処理・関数
 #========================================================
 def Motion_detection():
     # 動体検知アプリのメイン関数
@@ -169,8 +191,10 @@ def Motion_detection():
     #========================================================
 
 
+#========================================================
+
+
 
 
 # fletのメイン関数を呼び出す
 ft.app(target=main)
-#========================================================
